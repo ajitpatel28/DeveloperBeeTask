@@ -1,0 +1,23 @@
+<!-- overlay_layout.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#CC000000"> <!-- Semi-transparent black background -->
+
+    <TextView
+        android:id="@+id/alertText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Alert: Close the tab?"
+        android:textColor="#FFFFFF" /> <!-- White text color -->
+
+    <Button
+        android:id="@+id/closeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close Tab"
+        android:onClick="closeTab" />
+</LinearLayout>
