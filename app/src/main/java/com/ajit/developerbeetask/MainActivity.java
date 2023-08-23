@@ -14,6 +14,8 @@ import android.provider.Settings;
 public class MainActivity extends AppCompatActivity {
 
     private static final int NOTIFICATION_PERMISSION_REQUEST_CODE = 123;
+    private static final int REQUEST_OVERLAY_PERMISSION = 1001;
+
 
 
     @Override
@@ -24,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
         if (!NotificationManagerCompat.from(this).areNotificationsEnabled()) {
             // Notification permission not granted, show dialog to request permission
             showPermissionDialog();
+        }
+
+        if (!Settings.canDrawOverlays(this)) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, REQUEST_OVERLAY_PERMISSION);
         }
 
         findViewById(R.id.openSettingsButton).setOnClickListener(v -> {
@@ -56,13 +64,14 @@ public class MainActivity extends AppCompatActivity {
         alertDialogBuilder.show();
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
-            // Check again if notification permission was granted after returning from settings
-            if (!NotificationManagerCompat.from(this).areNotificationsEnabled()) {
-                showPermissionDialog();
+        if (requestCode == REQUEST_OVERLAY_PERMISSION) {
+            if (Settings.canDrawOverlays(this)) {
+                // Permission granted, start the SystemOverlayService
+                startService(new Intent(this, MainActivity.class));
             }
         }
     }
